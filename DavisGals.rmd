@@ -1,7 +1,7 @@
 ---
 title: "Booze and choice of seat"
-author: "Put your name here!"
-date: "put the date here"
+author: "Bridget East"
+date: "10/15/18"
 output:
   html_document:
     df_print: paged
@@ -22,11 +22,14 @@ Is there any difference in alcohol consumption between the students who sit in t
   
 Same question restricted to just female students. 
   
-
+We will start by loading the UC Davis data from the tiger stats package. The UC Davis data set consisted of 173 observations of students at UC Davis and 12 different variables, including amount of alcohol consumed per week, seat choice, and sex.
+  
 # Methods
 
 <!--Decide on your methods:  use "variable analysis" or other appropriate descriptors.  Make sure to choose at least one graphical method and at least one numerical method.!-->
-
+  
+We will be performing one way anova tests comparing seat choice with alcohol consumption to see if there is a strong correlation. We will then perform the same test, but only involving female students.
+  
 #Results
 
 <!--Divide this section into two sub-sections:  One for your descriptive  results and one for your inferential results.!-->
@@ -36,11 +39,38 @@ Same question restricted to just female students.
 ### Graphical Descriptive Results
 
 <!--Graphical results here.  Make sure to show your code.  Provide appropriate labels for axes, giving units if possible, and provide a good title for the graph, too.  Use the graphical results to describe the patterns if any that exist in the data as focused toward the research question!-->
+   
+```{r}
+data(ucdavis1, package="tigerstats")
+```
 
+    
+```{r echo=FALSE}
+AnovaModel.3 <- aov(alcohol ~ Seat, data=ucdavis1)
+summary(AnovaModel.3)
+with(ucdavis1, numSummary(alcohol, groups=Seat, statistics=c("mean", "sd")))
+local({
+  .Pairs <- glht(AnovaModel.3, linfct = mcp(Seat = "Tukey"))
+  print(summary(.Pairs)) # pairwise tests
+  print(confint(.Pairs)) # confidence intervals
+  print(cld(.Pairs)) # compact letter display
+  old.oma <- par(oma=c(0,5,0,0))
+  plot(confint(.Pairs))
+  par(old.oma)
+})
+```
+  
 ### Numerical Descriptive Results
 
 <!--Numerical results go here. Use the numerical results to describe the patterns if any that exist in the data as focused toward the research question!-->
+  
+```{r}
+AnovaModel.2 <- aov(alcohol ~ Seat, data=ucdavis1)
+summary(AnovaModel.2)
+with(ucdavis1, numSummary(alcohol, groups=Seat, statistics=c("mean", "sd")))
+```
 
+  
 ## Inferential Results
 
 <!--State hypothesis clearly.  Make sure your discussion of the inferential test covers all the aspects that the test output produces, such as test statistic, p-value etc.  Make a decision about the null hypothesis, explain the assumptions on which the selected test/procedure was based, and why the chosen procedure satisfys the assumptions and is appropriate to answer the research question!-->
@@ -49,3 +79,51 @@ Same question restricted to just female students.
 # Discussion and Conclusion
 
 <!--Discussion and conclusion here.  If you found a relationship be sure to consider whether the relationship occurs because one of the variavbles causes the other, or whether they perhasps are related for some other reason.  Watch the chapter 6 videos from the GeorgeTown videos collection.!-->
+
+
+
+
+
+
+
+```{r}
+library(mvtnorm, pos=36)
+```
+
+
+```{r}
+library(survival, pos=36)
+```
+
+
+```{r}
+library(MASS, pos=36)
+```
+
+
+```{r}
+library(TH.data, pos=36)
+```
+
+
+```{r}
+library(multcomp, pos=36)
+```
+
+
+```{r}
+library(abind, pos=41)
+```
+
+
+
+
+```{r}
+AnovaModel.4 <- lm(alcohol ~ Seat*Sex, data=ucdavis1, contrasts=list(Seat ="contr.Sum", Sex ="contr.Sum"))
+Anova(AnovaModel.4)
+with(ucdavis1, (tapply(alcohol, list(Seat, Sex), mean, na.rm=TRUE))) # means
+with(ucdavis1, (tapply(alcohol, list(Seat, Sex), sd, na.rm=TRUE))) # std. deviations
+xtabs(~ Seat + Sex, data=ucdavis1) # counts
+```
+
+
