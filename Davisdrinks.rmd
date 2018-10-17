@@ -1,7 +1,7 @@
 ---
 title: "Booze and choice of seat"
-author: "Put your name here!"
-date: "put the date here"
+author: "Bridget East"
+date: "10/17/2018"
 output:
   html_document:
     df_print: paged
@@ -22,9 +22,14 @@ Is there any difference in alcohol consumption between the students who sit in t
   
 Same question restricted to just female students. 
   
+We will start by loading the UC Davis data from the tiger stats package. The UC Davis data set consisted of 173 observations of students at UC Davis and 12 different variables, including amount of alcohol consumed per week, seat choice, and sex.
+  
 
 # Methods
-
+  
+  
+We will be performing one way anova tests comparing seat choice with alcohol consumption to see if there is a correlation. We use a one way anova test because we are comparing seat choice, a categorical variable, and amount of drinks consumed, a numerical variable, with continuous data. We will then perform the same test, but only involving female students.
+  
 <!--Decide on your methods:  use "variable analysis" or other appropriate descriptors.  Make sure to choose at least one graphical method and at least one numerical method.!-->
 
 #Results
@@ -40,10 +45,16 @@ Same question restricted to just female students.
 boxplot(alcohol~Seat,data=ucdavis1,main="guys & gals")
 ```
   
+The mean of drinks in the back of the class lines up with the end of the results from the front and the 75th percentile of the middle.
+  
 ```{r}
 boxplot(alcohol~Seat,data=davisgals,main="Just gals")
 ```  
+  
+  
+It looks like students who sit in the back tend to consume more alcohol. The mean of the back seats alcohol consumption is close to the 75th percentile of the front and middle seats.
 
+  
 ### Numerical Descriptive Results
 
 <!--Numerical results go here. Use the numerical results to describe the patterns if any that exist in the data as focused toward the research question!-->
@@ -52,9 +63,13 @@ boxplot(alcohol~Seat,data=davisgals,main="Just gals")
 summary(alcohol~Seat,data=ucdavis1)
 ```
    
+The mean amount of drinks consumed in the back seats is about 5 higher than the mean of the middle and front.
+   
 ```{r}
 summary(alcohol~Seat,data=davisgals)
 ```
+    
+It looks like the numbers of alcoholic beverages consumed are on average higher in students who sit in the back seat by around 3 drinks in women, it was a bigger difference between the back and the middle and front when men were inccluded. This leads me to beleive men in the back may drink more than woman in the back.
     
 ## Inferential Results
 
@@ -66,13 +81,19 @@ summary(model)
 plot(TukeyHSD(model))
 ```
     
+The front and the back are the most different and the front and the middle are the most similiar.
+    
 ```{r}
 model.1 <- aov(alcohol~Seat,data=davisgals)
 summary(model.1)
 plot(TukeyHSD(model.1))
 ```
   
+These results of the anova test show that the middle and the front are very similar, but the front and the back; and the middle and the back are different. So the middle and the front are similar and different from the back seat choices.
 
 # Discussion and Conclusion
 
 <!--Discussion and conclusion here.  If you found a relationship be sure to consider whether the relationship occurs because one of the variavbles causes the other, or whether they perhasps are related for some other reason.  Watch the chapter 6 videos from the GeorgeTown videos collection.!-->
+  
+The results of this study were very informative, and it seems like seat choice and alcoholic consumption look correlated.  Whether sex is included or not, the people who sit in the back consume more alcohol than the people in the front and the middle. 
+  
