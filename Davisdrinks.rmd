@@ -81,7 +81,7 @@ summary(model)
 plot(TukeyHSD(model))
 ```
     
-The front and the back are the most different and the front and the middle are the most similiar.
+The front and the back are the most different and the front and the middle are the most similiar. It looks like a big difference between the two.
     
 ```{r}
 model.1 <- aov(alcohol~Seat,data=davisgals)
